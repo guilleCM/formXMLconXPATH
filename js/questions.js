@@ -1,6 +1,7 @@
 //**********************************************************************************************
 //VARIABLES DE CONTROL
 //**********************************************************************************************
+var xmlDoc = null;
 var formContainer = null;
 var nota = 0.0;
 
@@ -79,7 +80,7 @@ window.onload = function(){
 // Recuperamos los datos del fichero XML xml/preguntas.xml
 // xmlDOC es el documento leido XML. 
 function gestionarXml(dadesXml){
-	var xmlDoc = dadesXml.responseXML; //Parse XML to xmlDoc
+	xmlDoc = dadesXml.responseXML; //Parse XML to xmlDoc
 	var tipo = "";
 	var numeroCajaTexto = 0;
 	for (i = 0; i<10; i++) {
@@ -513,10 +514,3 @@ function comprobar(){
 	}
 	return true;
 }
-
-/*
-// POSIBLES REFACTORIZACIONES FUTURAS
-//
-// Convertir todos los arrays en un diccionario
-// Añadir cronometro para el examen
-*/
