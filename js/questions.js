@@ -82,6 +82,7 @@ window.onload = function(){
 function gestionarXml(dadesXml){
 	xmlDoc = dadesXml.responseXML; //Parse XML to xmlDoc
 	var tipo = "";
+	var txt = "";
 	var numeroCajaTexto = 0;
 	for (i = 0; i<10; i++) {
 		tipo = xmlDoc.getElementsByTagName("type")[i].innerHTML;
@@ -141,17 +142,20 @@ function imprimirTituloPregunta(i, xmlDoc){
 }
 
 function imprimirOpcionesSelect(i, xmlDoc) {
-	var numOpciones = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option').length;
-	var opt = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option');
+
+	var xpath="/questions/question[@id='mlag_00"+(i+1)+"']/option" ;
+	var nodes = xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+	var result = nodes.iterateNext();
 	var select = document.createElement("select");
 	select.id = "select"+i;
 	document.getElementById('pregunta'+i).appendChild(select);
-	for (j = 0; j < numOpciones; j++) { 
+	while (result) {
 		var option = document.createElement("option");
-		option.text = opt[j].innerHTML;
-		option.value = j ;
+		option.text = result.innerHTML;
 		select.options.add(option);
-	}  
+		result = nodes.iterateNext();
+	}
+
 }
 
 function imprimirCajaText(numeroCajaTexto, xmlDoc) {
@@ -196,6 +200,20 @@ function imprimirRadioButton(i, xmlDoc) {
 }
 
 function imprimirSelectMultiple(i, xmlDoc) {
+	var xpath="/questions/question["+i+"]/option" ; 
+	var nodes = xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+	var result = nodes.iterateNext();
+	var selectMultiple = document.createElement("select");
+	selectMultiple.multiple = "true";
+	while (result) {
+		var option = document.createElement("option");
+		option.innerHTML = result.innerHTML;
+		selectMultiple.appendChild(option);
+		result = nodes.iterateNext();
+	}
+	document.getElementById('pregunta'+i).appendChild(selectMultiple);
+
+	/*
 	var numOpciones = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option').length;
 	var opt = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option');
 	var selectMultiple = document.createElement("select");
@@ -207,6 +225,7 @@ function imprimirSelectMultiple(i, xmlDoc) {
 		selectMultiple.appendChild(option);
 		}
 	document.getElementById('pregunta'+i).appendChild(selectMultiple);
+	*/
 }
 
 function imprimirEspacios(numeroEspacios) {
