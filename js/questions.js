@@ -143,7 +143,7 @@ function imprimirTituloPregunta(i, xmlDoc){
 
 function imprimirOpcionesSelect(i, xmlDoc) {
 
-	var xpath="/questions/question[@id='mlag_00"+(i+1)+"']/option" ;
+	var xpath="/questions/question["+(i+1)+"]/option" ;
 	var nodes = xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
 	var result = nodes.iterateNext();
 	var select = document.createElement("select");
@@ -167,40 +167,48 @@ function imprimirCajaText(numeroCajaTexto, xmlDoc) {
 
 
 function imprimirCheckBox(i, xmlDoc) {
-	var numOpciones = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option').length;
-	var opt = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option');
-	for (j = 0; j < numOpciones; j++) {
+	var xpath="/questions/question["+(i+1)+"]/option" ; 
+	var nodes = xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+	var result = nodes.iterateNext();
+	var j = 0;
+	while (result) {
 		var label = document.createElement("label");
 		var input = document.createElement("input");
-		label.innerHTML=opt[j].innerHTML;
-		input.type="checkbox";
-		input.name="preg"+i;
-		input.id="preg"+i+"ans"+j;
+		label.innerHTML = result.innerHTML;
+		input.type = "checkbox";
+		input.name = "preg"+i;
+		input.id = "preg"+i+"ans"+j;
 		document.getElementById('pregunta'+i).appendChild(input);
 		document.getElementById('pregunta'+i).appendChild(label);
 		document.getElementById('pregunta'+i).appendChild(document.createElement("br"));
+		result = nodes.iterateNext();
+		j++;
 	}
 }
 
 function imprimirRadioButton(i, xmlDoc) {
-	var numOpciones = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option').length;
-	var opt = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option');
-	for (j = 0; j < numOpciones; j++) {
+	var xpath="/questions/question["+(i+1)+"]/option" ; 
+	var nodes = xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+	var result = nodes.iterateNext();
+	var j = 0;
+	while (result) {
 		var input = document.createElement("input");
-		var answerTitle = opt[j].innerHTML;
+		var answerTitle = result.innerHTML;
 		var span = document.createElement("span");
 		span.innerHTML = answerTitle;
-		input.type="radio";
-		input.name="preg"+i;
-		input.id="preg"+i+"ans"+j;
+		input.type = "radio";
+		input.name = "preg"+i;
+		input.id = "preg"+i+"ans"+j;
 		document.getElementById('pregunta'+i).appendChild(input);
 		document.getElementById('pregunta'+i).appendChild(span);
 		document.getElementById('pregunta'+i).appendChild(document.createElement("br"));
-	}	
+		result = nodes.iterateNext();
+		j++;
+	}
 }
 
 function imprimirSelectMultiple(i, xmlDoc) {
-	var xpath="/questions/question["+i+"]/option" ; 
+	var xpath="/questions/question["+(i+1)+"]/option" ; 
 	var nodes = xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
 	var result = nodes.iterateNext();
 	var selectMultiple = document.createElement("select");
@@ -212,20 +220,6 @@ function imprimirSelectMultiple(i, xmlDoc) {
 		result = nodes.iterateNext();
 	}
 	document.getElementById('pregunta'+i).appendChild(selectMultiple);
-
-	/*
-	var numOpciones = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option').length;
-	var opt = xmlDoc.getElementsByTagName('question')[i].getElementsByTagName('option');
-	var selectMultiple = document.createElement("select");
-	selectMultiple.multiple="true";
-	for (j = 0; j < numOpciones; j++) {
-		var answerTitle = opt[j].innerHTML;
-		var option = document.createElement("option");
-		option.innerHTML = answerTitle;
-		selectMultiple.appendChild(option);
-		}
-	document.getElementById('pregunta'+i).appendChild(selectMultiple);
-	*/
 }
 
 function imprimirEspacios(numeroEspacios) {
