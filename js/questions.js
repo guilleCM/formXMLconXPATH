@@ -487,6 +487,24 @@ function presentarNota(){
 	document.getElementById('resultadosDiv').appendChild(br);
 }
 
+function presentarTablaXsl() {
+	document.getElementById('resultadosDiv').style.display = "block";
+   //Código transformación xslt con xmlDoc y xslDoc
+   if (document.implementation && document.implementation.createDocument) {
+        xsltProcessor = new XSLTProcessor();
+        xsltProcessor.importStylesheet(xslDoc);
+        resultDocument = xsltProcessor.transformToFragment(xmlDoc, document);
+        document.getElementById('resultadosDiv').appendChild(resultDocument);
+   }
+   darRespuestaHtml("Nota: "+nota+" puntos sobre 3");
+   //bloquear formulario (recargar para volver a empezar)
+   var f=formElement;
+   var e = f.elements;
+   for (var i = 0, len = e.length; i < len; ++i) {
+    e[i].disabled = true;
+	}
+}
+
 function actualizarNota() {
 	document.getElementById("nota").textContent="Nota: "+nota.toFixed(2)+" puntos sobre 10";
 	if (nota >=5) {
