@@ -2,6 +2,7 @@
 //VARIABLES DE CONTROL
 //**********************************************************************************************
 var xmlDoc = null;
+var xslDoc = null;
 var formContainer = null;
 var nota = 0.0;
 
@@ -60,6 +61,7 @@ window.onload = function(){
 			corregirRadio();
 			corregirSelectMultiple();
 			actualizarNota();
+			presentarTablaXsl();
 	 	}
 	 	return false;
 	}
@@ -72,6 +74,16 @@ window.onload = function(){
 		}
 	};
 	xhttp.open("GET", "xml/preguntas.xml", true);
+	xhttp.send();
+
+	//LEER XSL de xml/transform.xsl
+	xhttp = new XMLHttpRequest();
+ 	xhttp.onreadystatechange = function() {
+  		if (this.readyState == 4 && this.status == 200) {
+   			xslDoc=this.responseXML;
+  		}
+ 	};
+ 	xhttp.open("GET", "xml/transform.xsl", true);
 	xhttp.send();
 }
 
@@ -488,17 +500,15 @@ function presentarNota(){
 }
 
 function presentarTablaXsl() {
-	document.getElementById('resultadosDiv').style.display = "block";
+	document.getElementById('tablaResultados').style.display = "block";
    //Código transformación xslt con xmlDoc y xslDoc
    if (document.implementation && document.implementation.createDocument) {
         xsltProcessor = new XSLTProcessor();
         xsltProcessor.importStylesheet(xslDoc);
         resultDocument = xsltProcessor.transformToFragment(xmlDoc, document);
-        document.getElementById('resultadosDiv').appendChild(resultDocument);
+        document.getElementById('tablaResultados').appendChild(resultDocument);
    }
-   darRespuestaHtml("Nota: "+nota+" puntos sobre 3");
-   //bloquear formulario (recargar para volver a empezar)
-   var f=formElement;
+   var f = formContainer;
    var e = f.elements;
    for (var i = 0, len = e.length; i < len; ++i) {
     e[i].disabled = true;
